@@ -10,23 +10,34 @@ class Game extends Model
     use HasFactory;
 
     protected $fillable = [
-        'player_one_id', 'player_two_id', 'winner_id', 'word', 'status'
+        'player1_id',
+        'player2_id',
+        'status',
+        'word',
+        'winner_id'
     ];
 
-    public function playerOne()
+    public function player1()
     {
-        return $this->belongsTo(User::class, 'player_one_id');
+        return $this->belongsTo(User::class, 'player1_id');
     }
 
-    public function playerTwo()
+    public function player2()
     {
-        return $this->belongsTo(User::class, 'player_two_id');
+        return $this->belongsTo(User::class, 'player2_id');
     }
 
     public function winner()
     {
         return $this->belongsTo(User::class, 'winner_id');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
+
+
 
 

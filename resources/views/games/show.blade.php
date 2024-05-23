@@ -1,33 +1,17 @@
 <div class="container">
-    <h1>Spel Details</h1>
-    <p>Woord: {{ $game->word }}</p>
-    <p>Status: {{ $game->status }}</p>
-    <p>Speler 1: {{ $game->playerOne->name }}</p>
-    <p>Speler 2: {{ $game->playerTwo->name }}</p>
+    <h1>Game</h1>
+    <p>Player 1: {{ $game->player1->name }}</p>
+    <p>Player 2: {{ $game->player2->name }}</p>
 
-    @if ($game->status == 'pending' && $game->player_two_id == auth()->id())
-        <form method="POST" action="{{ route('games.update', $game->id) }}">
+    @if ($game->status == 'pending' && auth()->id() == $game->player2_id)
+        <form action="{{ route('games.play', $game) }}" method="POST">
             @csrf
-            @method('PUT')
-            <input type="hidden" name="status" value="active">
-            <button type="submit" class="btn btn-success">Accepteer Spel</button>
+            <input type="text" name="word" placeholder="Enter your word">
+            <button type="submit">Play</button>
         </form>
     @endif
 
-    <h2>Reacties</h2>
-    <ul>
-        @foreach ($game->comments as $comment)
-            <li>{{ $comment->content }} - {{ $comment->user->name }}</li>
-        @endforeach
-    </ul>
-
-    <form method="POST" action="{{ route('comments.store') }}">
-        @csrf
-        <input type="hidden" name="game_id" value="{{ $game->id }}">
-        <div class="form-group">
-            <label for="content">Reactie</label>
-            <textarea class="form-control" id="content" name="content" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Plaats Reactie</button>
-    </form>
+    @if ($game->status == 'completed')
+        <p>Winner: {{ $game->winner->name }}</p>
+    @endif
 </div>

@@ -11,48 +11,35 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'avatar',
+        'last_login_at'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-
+    // Relaties
     public function friends()
     {
-        return $this->hasMany(Friend::class, 'user_id')->orWhere('friend_id', $this->id);
+        return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')
+                    ->withPivot('status')
+                    ->withTimestamps();
+    }
+
+    public function gamesAsPlayer1()
+    {
+        return $this->hasMany(Game::class, 'player1_id');
+    }
+
+    public function gamesAsPlayer2()
+    {
+        return $this->hasMany(Game::class, 'player2_id');
     }
 
     public function games()
     {
-        return $this->hasMany(Game::class, 'player_one_id')->orWhere('player_two_id', $this->id);
+        return $this->gamesAsPlayer1->merge($this->gamesAsPlayer2);
     }
 
     public function comments()
@@ -60,3 +47,4 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 }
+

@@ -21,7 +21,8 @@
                 @endforeach
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Start Spel</button>
+        <div></div>
+        <button type="submit" class="btn btn-primary">Start Spel Test</button>
     </form>
 </div>
 <script>

@@ -6,38 +6,27 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [LandingPageController::class, 'index'])->name('landing');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware(['auth'])->group(function () {
+    Route::post('/friends', [FriendController::class, 'addFriend'])->name('friends.add');
+    Route::post('/friends/{friend}/accept', [FriendController::class, 'acceptFriend'])->name('friends.accept');
+    Route::post('/friends/{friend}/decline', [FriendController::class, 'declineFriend'])->name('friends.decline');
 
-    // Friends routes
-    Route::get('/friends', [FriendController::class, 'index'])->name('friends.index');
-    Route::post('/friends', [FriendController::class, 'store'])->name('friends.store');
-    Route::put('/friends/{friend}', [FriendController::class, 'update'])->name('friends.update');
-    Route::delete('/friends/{friend}', [FriendController::class, 'destroy'])->name('friends.destroy');
-
-    // Games routes
-    Route::get('/games', [GameController::class, 'index'])->name('games.index');
-    Route::get('/games/create', [GameController::class, 'create'])->name('games.create');
-    Route::post('/games', [GameController::class, 'store'])->name('games.store');
+    Route::get('/games/random', [GameController::class, 'startRandomGame'])->name('games.random');
+    Route::post('/games/friend', [GameController::class, 'startFriendGame'])->name('games.friend');
     Route::get('/games/{game}', [GameController::class, 'show'])->name('games.show');
-    Route::get('/games/{game}/edit', [GameController::class, 'edit'])->name('games.edit');
-    Route::put('/games/{game}', [GameController::class, 'update'])->name('games.update');
-    Route::delete('/games/{game}', [GameController::class, 'destroy'])->name('games.destroy');
-
-    // Comments routes
-    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('/games/{game}/play', [GameController::class, 'play'])->name('games.play');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');
 });
 
 require __DIR__.'/auth.php';

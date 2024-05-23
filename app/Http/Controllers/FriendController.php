@@ -7,36 +7,35 @@ use Illuminate\Http\Request;
 
 class FriendController extends Controller
 {
-    public function index()
+    public function addFriend(Request $request)
     {
-        $friends = Friend::where('user_id', auth()->id())->orWhere('friend_id', auth()->id())->get();
-        return view('friends.index', compact('friends'));
+        $request->validate([
+            'friend_id' => 'required|exists:users,id'
+        ]);
+
+        $friend = new Friend();
+        $friend->user_id = auth()->id();
+        $friend->friend_id = $request->friend_id;
+        $friend->status = 'pending';
+        $friend->save();
+
+        return back()->with('success', 'Friend request sent.');
     }
 
-    public function store(Request $request)
+    public function acceptFriend(Request $request, Friend $friend)
     {
-        $friend = User::where('email', $request->friend_email)->orWhere('name', $request->friend_name)->first();
-        if ($friend) {
-            Friend::create([
-                'user_id' => auth()->id(),
-                'friend_id' => $friend->id,
-                'status' => 'pending'
-            ]);
-        }
+        $this->authorize('update', $friend);
+        $friend->update(['status' => 'accepted']);
 
-        return redirect()->route('friends.index');
+        return back()->with('success', 'Friend request accepted.');
     }
 
-    public function update(Request $request, Friend $friend)
+    public function declineFriend(Request $request, Friend $friend)
     {
-        $friend->update(['status' => $request->status]);
-        return redirect()->route('friends.index');
-    }
+        $this->authorize('update', $friend);
+        $friend->update(['status' => 'declined']);
 
-    public function destroy(Friend $friend)
-    {
-        $friend->delete();
-        return redirect()->route('friends.index');
+        return back()->with('success', 'Friend request declined.');
     }
 }
 
