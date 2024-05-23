@@ -13,7 +13,7 @@
             <li>{{ $user->name }} - {{ $user->wins }} wins</li>
         @endforeach
     </ul>
-    <h3>All Time</h3>
+    <h3>All Timeawdef</h3>
     <ul>
         @foreach ($leaderboard_all_time as $user)
             <li>{{ $user->name }} - {{ $user->wins }} wins</li>
