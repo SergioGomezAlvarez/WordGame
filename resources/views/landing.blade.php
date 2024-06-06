@@ -30,7 +30,8 @@
         .leaderboard-list li {
             font-size: 1.2rem;
             padding: 10px;
-            border-bottom: 1px solid #dee2e6;
+            border-bottom: 2px solid #dee2e6;
+
         }
     </style>
 </head>
