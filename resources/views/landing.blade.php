@@ -33,6 +33,50 @@
             border-bottom: 2px solid #dee2e6;
 
         }
+
+        .container-play-game {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            width: 100%;
+            height: 200px;
+
+        }
+
+        .play-game-text-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            width: 80%;
+            height: 80px;
+
+        }
+
+        .play-game-button{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            width: 15%;
+            height: 40px;
+
+            text-decoration: none;
+
+            border-radius: 10px;
+            border: 1px solid black;
+            background-color: greenyellow;
+            color: black;
+            cursor: pointer;
+        }
+
+        .play-game-button:hover{
+            text-decoration: none;
+            background-color: rgb(111, 179, 9);
+            color: black;
+        }
     </style>
 </head>
 <header>
@@ -42,7 +86,7 @@
             @auth
                 <a href="{{ url('/dashboard') }}"
                     class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                    Dashboard TEST
+                    Dashboard
                 </a>
             @else
                 <a href="{{ route('login') }}"
@@ -60,6 +104,7 @@
         </nav>
     @endif
 </header>
+
 <body>
 
     <div class="container">
@@ -96,6 +141,14 @@
                     </ul>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="container-play-game">
+        <div class="play-game-text-container">
+            <h1 class="play-game-text">Do you want to play now?!</h1>
+        </div>
+        <div class="play-game-text-container">
+            <a class="play-game-button">Jump In!</a>
         </div>
     </div>
 
