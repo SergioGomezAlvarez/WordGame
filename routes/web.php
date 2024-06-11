@@ -8,6 +8,8 @@ use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WordleController;
+
 
 Route::get('/', [LandingPageController::class, 'index'])->name('landing');
 
@@ -27,6 +29,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/games/{game}/play', [GameController::class, 'play'])->name('games.play');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/edit', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::post('/check', [WordleController::class, 'check']);
+    Route::get('/game', [WordleController::class, 'index'])->name('wordle.game');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

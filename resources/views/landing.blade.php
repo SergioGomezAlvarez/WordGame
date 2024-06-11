@@ -148,7 +148,7 @@
             <h1 class="play-game-text">Do you want to play now?!</h1>
         </div>
         <div class="play-game-text-container">
-            <a class="play-game-button">Jump In!</a>
+            <a class="play-game-button" href="{{ route('wordle.game') }}">Jump In!</a>
         </div>
     </div>
 
