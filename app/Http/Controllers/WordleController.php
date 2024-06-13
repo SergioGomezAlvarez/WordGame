@@ -23,13 +23,17 @@ class WordleController extends Controller
         }
 
         $result = [];
+        $correctGuess = true;
+
         for ($i = 0; $i < strlen($word); $i++) {
             if ($guess[$i] === $word[$i]) {
                 $result[] = ['letter' => $guess[$i], 'status' => 'correct'];
             } elseif (strpos($word, $guess[$i]) !== false) {
                 $result[] = ['letter' => $guess[$i], 'status' => 'present'];
+                $correctGuess = false;
             } else {
                 $result[] = ['letter' => $guess[$i], 'status' => 'absent'];
+                $correctGuess = false;
             }
         }
 
@@ -40,6 +44,9 @@ class WordleController extends Controller
         // Sla de bijgewerkte gissingen op in de sessie
         session(['guesses' => $guesses]);
 
-        return response()->json($result);
+        return response()->json([
+            'result' => $result,
+            'correct' => $correctGuess
+        ]);
     }
 }

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,83 +64,112 @@
             border: 1px solid #ccc;
         }
 
-        .go-back-home-button{
+        .wordgame-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: auto;
+            gap: 40px;
+        }
+
+        .play-game-button {
             display: flex;
             justify-content: center;
             align-items: center;
 
             width: 15%;
-            height: 50px;
+            height: 40px;
 
-            background-color: black;
-            color: white
+            text-decoration: none;
+
+            border-radius: 10px;
+            border: 1px solid black;
+            background-color: greenyellow;
+            color: black;
+            cursor: pointer;
+        }
+
+        .play-game-button:hover {
+            text-decoration: none;
+            background-color: rgb(111, 179, 9);
+            color: black;
         }
     </style>
 </head>
-
 <body>
-    <div class="wordle">
-        <a class="go-back-home-button">Home</a>
-        <h1>Wordle Game</h1>
-        <form id="wordle-form">
-            <input type="text" name="guess" id="guess" maxlength="30">
-            <button type="submit">Check</button>
-        </form>
-        <div class="result" id="result"></div>
-        <h1>Je recente gissingen:</h1>
-        <div class="guesses" id="guesses">
-            @foreach ($guesses as $guess)
-                <div class="guess">
-                    @foreach ($guess['result'] as $letter)
-                        <span class="{{ $letter['status'] }}">{{ $letter['letter'] }}</span>
-                    @endforeach
-                </div>
-            @endforeach
+    <div class="wordgame-container">
+        <a class="play-game-button" href="{{ route('landing') }}">Home</a>
+
+        <div class="wordle">
+            <h1>Wordle Game</h1>
+            <form id="wordle-form">
+                <input type="text" name="guess" id="guess" maxlength="30">
+                <button type="submit">Check</button>
+            </form>
+            <div class="result" id="result"></div>
+            <h1>Je recente gissingen:</h1>
+            <div class="guesses" id="guesses">
+                @foreach ($guesses as $guess)
+                    <div class="guess">
+                        @foreach ($guess['result'] as $letter)
+                            <span class="{{ $letter['status'] }}">{{ $letter['letter'] }}</span>
+                        @endforeach
+                    </div>
+                @endforeach
+            </div>
         </div>
-    </div>
-    <script>
-        document.getElementById('wordle-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const guess = document.getElementById('guess').value;
+        <script>
+            document.getElementById('wordle-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const guess = document.getElementById('guess').value;
 
-            fetch('/check', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        guess: guess
+                fetch('/check', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            guess: guess
+                        })
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const resultDiv = document.getElementById('result');
-                    resultDiv.innerHTML = '';
-                    if (data.error) {
-                        resultDiv.innerHTML = `<span>${data.error}</span>`;
-                    } else {
-                        data.forEach(item => {
-                            const span = document.createElement('span');
-                            span.textContent = item.letter;
-                            span.className = item.status;
-                            resultDiv.appendChild(span);
-                        });
+                    .then(response => response.json())
+                    .then(data => {
+                        const resultDiv = document.getElementById('result');
+                        resultDiv.innerHTML = '';
+                        if (data.error) {
+                            resultDiv.innerHTML = `<span>${data.error}</span>`;
+                        } else {
+                            data.result.forEach(item => {
+                                const span = document.createElement('span');
+                                span.textContent = item.letter;
+                                span.className = item.status;
+                                resultDiv.appendChild(span);
+                            });
 
-                        const guessesDiv = document.getElementById('guesses');
-                        const guessDiv = document.createElement('div');
-                        guessDiv.className = 'guess';
-                        data.forEach(item => {
-                            const span = document.createElement('span');
-                            span.textContent = item.letter;
-                            span.className = item.status;
-                            guessDiv.appendChild(span);
-                        });
-                        guessesDiv.insertBefore(guessDiv, guessesDiv.firstChild);
-                    }
-                });
-        });
-    </script>
+                            const guessesDiv = document.getElementById('guesses');
+                            const guessDiv = document.createElement('div');
+                            guessDiv.className = 'guess';
+                            data.result.forEach(item => {
+                                const span = document.createElement('span');
+                                span.textContent = item.letter;
+                                span.className = item.status;
+                                guessDiv.appendChild(span);
+                            });
+                            guessesDiv.insertBefore(guessDiv, guessesDiv.firstChild);
+
+                            if (data.correct) {
+                                const congratsDiv = document.createElement('div');
+                                congratsDiv.innerHTML = `<h2>Congratulations! You've guessed the word!</h2>`;
+                                document.querySelector('.wordle').appendChild(congratsDiv);
+                            }
+                        }
+                    });
+            });
+        </script>
+    </div>
+
 </body>
-
 </html>
