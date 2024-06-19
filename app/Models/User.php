@@ -20,12 +20,7 @@ class User extends Authenticatable
     ];
 
     // Relaties
-    public function friends()
-    {
-        return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')
-                    ->withPivot('status')
-                    ->withTimestamps();
-    }
+
 
     public function gamesAsPlayer1()
     {
@@ -46,5 +41,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
+
+    public function friends()
+    {
+        return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id');
+    }
+
 }
 

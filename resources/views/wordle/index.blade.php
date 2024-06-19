@@ -67,11 +67,10 @@
         .wordgame-container {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-around;
             align-items: center;
             width: 100%;
             height: auto;
-            gap: 40px;
         }
 
         .play-game-button {
@@ -121,8 +120,16 @@
             </div>
         </div>
         <script>
+            let guessCount = 0;
+            const maxGuesses = 6;
+
             document.getElementById('wordle-form').addEventListener('submit', function(event) {
                 event.preventDefault();
+                if (guessCount >= maxGuesses) {
+                    alert("Het spel is voorbij! Je hebt het maximale aantal gissingen bereikt.");
+                    return;
+                }
+
                 const guess = document.getElementById('guess').value;
 
                 fetch('/check', {
@@ -160,16 +167,21 @@
                             });
                             guessesDiv.insertBefore(guessDiv, guessesDiv.firstChild);
 
+                            guessCount++;
+
                             if (data.correct) {
                                 const congratsDiv = document.createElement('div');
                                 congratsDiv.innerHTML = `<h2>Congratulations! You've guessed the word!</h2>`;
                                 document.querySelector('.wordle').appendChild(congratsDiv);
+                            } else if (guessCount >= maxGuesses) {
+                                const gameOverDiv = document.createElement('div');
+                                gameOverDiv.innerHTML = `<h2>Game Over! You've reached the maximum number of guesses.</h2>`;
+                                document.querySelector('.wordle').appendChild(gameOverDiv);
                             }
                         }
                     });
             });
         </script>
     </div>
-
 </body>
 </html>
