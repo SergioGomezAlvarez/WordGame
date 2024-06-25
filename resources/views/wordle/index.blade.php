@@ -102,13 +102,13 @@
         <a class="play-game-button" href="{{ route('landing') }}">Home</a>
 
         <div class="wordle">
-            <h1>Wordle Game</h1>
+            <h1>Word Game</h1>
             <form id="wordle-form">
                 <input type="text" name="guess" id="guess" maxlength="30">
                 <button type="submit">Check</button>
             </form>
             <div class="result" id="result"></div>
-            <h1>Je recente gissingen:</h1>
+            <h1>Your recent guesses:</h1>
             <div class="guesses" id="guesses">
                 @foreach ($guesses as $guess)
                     <div class="guess">
