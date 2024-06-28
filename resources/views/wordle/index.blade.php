@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -95,9 +96,51 @@
             background-color: rgb(111, 179, 9);
             color: black;
         }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 10px 20px;
+            border-bottom: 3px solid greenyellow;
+        }
+
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar .logo img {
+            height: 50px;
+            vertical-align: middle;
+        }
+
+        .navbar .nav-links {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .navbar .nav-links li {
+            margin-left: 20px;
+        }
+
+        .navbar .nav-links a {
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+        }
+
+        .navbar .nav-links a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
+
 <body>
+
     <div class="wordgame-container">
         <a class="play-game-button" href="{{ route('landing') }}">Home</a>
 
@@ -175,7 +218,8 @@
                                 document.querySelector('.wordle').appendChild(congratsDiv);
                             } else if (guessCount >= maxGuesses) {
                                 const gameOverDiv = document.createElement('div');
-                                gameOverDiv.innerHTML = `<h2>Game Over! You've reached the maximum number of guesses.</h2>`;
+                                gameOverDiv.innerHTML =
+                                    `<h2>Game Over! You've reached the maximum number of guesses.</h2>`;
                                 document.querySelector('.wordle').appendChild(gameOverDiv);
                             }
                         }
@@ -184,4 +228,5 @@
         </script>
     </div>
 </body>
+
 </html>

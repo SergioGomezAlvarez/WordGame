@@ -138,7 +138,7 @@
 <body>
     <nav class="navbar">
         <div class="logo">
-            <img src="images/sga-logo.png" class="sga-logo" alt="Logo">
+            <img src="images/sga-logo.png" class="sga-logo">
         </div>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
@@ -148,6 +148,14 @@
             @if (Route::has('login'))
                 @auth
                     <li><a href="{{ url('/dashboard') }}">Dashboard</a></li>
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                style="background:none;border:none;color:black;font-size:18px;cursor:pointer;">Log
+                                Out</button>
+                        </form>
+                    </li>
                 @else
                     <li><a href="{{ route('login') }}">Login</a></li>
                     @if (Route::has('register'))
@@ -157,7 +165,6 @@
             @endif
         </ul>
     </nav>
-
     <div class="container">
         <div class="text-center">
             <h1 class="display-4">Welcome to the Game</h1>
